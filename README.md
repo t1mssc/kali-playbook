@@ -11,6 +11,7 @@ pipx install --include-deps ansible
 ## Usage
 - git clone https://github.com/t1mssc/kali-playbook.git 
 - cd kali-playbook
+- ansible-galaxy install -r requirements.yml
 - sudo whoami
 - ansible-playbook main.yml
 
