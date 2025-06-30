@@ -6,10 +6,6 @@
   become: true
   import_tasks: install-peass.yml
 
-- name: Installing VSCode
-  become: true
-  import_tasks: install-vscode.yml
-
 - name: Installing SecLists
   become: true
   import_tasks: install-seclists.yml
