@@ -1,0 +1,88 @@
+---
+- name: Install Terminator
+  apt:
+    name: terminator
+    state: present
+  tags:
+    - terminal
+    - terminator
+  become: true
+
+- name: Create Terminator config directory
+  file:
+    path: "{{ ansible_env.HOME }}/.config/terminator"
+    state: directory
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+    mode: "0755"
+  tags:
+    - terminal
+    - config
+
+- name: Create Terminator configuration
+  copy:
+    content: |
+      [global_config]
+        focus = system
+        suppress_multiple_term_dialog = True
+      [keybindings]
+      [profiles]
+        [[default]]
+          background_color = "#282c34"
+          foreground_color = "#abb2bf"
+          show_titlebar = False
+          scrollbar_position = hidden
+          copy_on_selection = True
+      [layouts]
+        [[default]]
+          [[[window0]]]
+            type = Window
+            parent = ""
+          [[[child1]]]
+            type = Terminal
+            parent = window0
+      [plugins]
+    dest: "{{ ansible_env.HOME }}/.config/terminator/config"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+    mode: "0644"
+  tags:
+    - terminal
+    - config
+
+- name: Set terminator as default terminal
+  alternatives:
+    name: x-terminal-emulator
+    path: /usr/bin/terminator
+    priority: 50
+  become: true
+
+- name: Update desktop environment terminal preference
+  shell: |
+    if command -v xfconf-query >/dev/null 2>&1; then
+      xfconf-query -c xfce4-keyboard-shortcuts -p "/commands/custom/<Primary><Alt>t" -n -t string -s "terminator"
+      xfconf-query -c xfce4-keyboard-shortcuts -p "/xfwm4/custom/<Primary><Alt>t" -n -t string -s "terminator"
+      
+      # Set as preferred terminal application
+      xfconf-query -c xfce4-helpers -p "/TerminalEmulator" -n -t string -s "terminator"
+      xfconf-query -c xfce4-helpers -p "/TerminalEmulatorDirect" -n -t string -s "/usr/bin/terminator"
+      
+      
+      # Alternative method: Update the alternatives system if available
+      if command -v update-alternatives >/dev/null 2>&1; then
+        sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/terminator 50
+        sudo update-alternatives --set x-terminal-emulator /usr/bin/terminator
+      fi
+    fi
+  become: no
+  become_user: "{{ ansible_user_id }}"
+  ignore_errors: yes
+  tags:
+    - terminal
+    - desktop
+
+- name: Set Terminator as default for terminal mime type
+  shell: |
+    xdg-mime default terminator.desktop application/x-terminal-emulator
+  become: no
+  ignore_errors: yes

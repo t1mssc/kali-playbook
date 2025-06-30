@@ -1,0 +1,5 @@
+---
+- name: Set timezone to Asia/Manila
+  community.general.timezone:
+    name: Asia/Manila
+  become: true

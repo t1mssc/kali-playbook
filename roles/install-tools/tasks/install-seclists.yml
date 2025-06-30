@@ -1,0 +1,36 @@
+---
+- name: Clone SecLists repository
+  git:
+    repo: "{{ seclists_repo }}"
+    dest: "{{ opt_dir }}/SecLists"
+    clone: yes
+    update: yes
+    force: yes
+  tags:
+    - security_tools
+    - seclists
+  become: true
+  become_method: sudo
+
+- name: Set proper ownership for SecLists
+  file:
+    path: "{{ opt_dir }}/SecLists"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_gid }}"
+    recurse: yes
+  tags:
+    - security_tools
+    - seclists
+  become: true
+  become_method: sudo
+
+- name: Create symlink for easy access to SecLists
+  file:
+    src: "{{ opt_dir }}/SecLists"
+    dest: "{{ wordlists_dir }}/SecLists"
+    state: link
+  tags:
+    - security_tools
+    - seclists
+  become: true
+  become_method: sudo

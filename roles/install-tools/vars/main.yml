@@ -1,0 +1,9 @@
+---
+# install-seclists
+opt_dir: /opt
+seclists_repo: https://github.com/danielmiessler/SecLists.git
+wordlists_dir: /usr/share/wordlists
+
+# install-peass
+download_dir: "/opt/peass-ng"
+github_api_url: "https://api.github.com/repos/carlospolop/PEASS-ng/releases/latest"

@@ -1,0 +1,5 @@
+---
+- include_tasks: config-rockyou.yml
+- include_tasks: config-burp.yml
+- include_tasks: config-firefox.yml
+- include_tasks: config-metasploit.yml

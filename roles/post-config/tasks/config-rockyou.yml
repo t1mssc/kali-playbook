@@ -1,0 +1,57 @@
+---
+- name: Ensure wordlists directory exists
+  file:
+    path: "{{ wordlist_dir }}"
+    state: directory
+    mode: '0755'
+
+- name: Check if rockyou.txt.gz exists
+  stat:
+    path: "{{ rockyou_gz }}"
+  register: rockyou_gz_stat
+
+- name: Display rockyou.txt.gz status
+  debug:
+    msg: "rockyou.txt.gz exists: {{ rockyou_gz_stat.stat.exists }}"
+
+- name: Check if rockyou.txt already exists (unzipped)
+  stat:
+    path: "{{ rockyou_txt }}"
+  register: rockyou_txt_stat
+
+- name: Unzip rockyou.txt.gz using gunzip (recommended method)
+  command: gunzip "{{ rockyou_gz }}"
+  args:
+    creates: "{{ rockyou_txt }}"
+  when: rockyou_gz_stat.stat.exists and not rockyou_txt_stat.stat.exists
+  register: gunzip_result
+  become: true
+  become_method: sudo
+
+- name: Set proper permissions on rockyou.txt
+  file:
+    path: "{{ rockyou_txt }}"
+    mode: '0644'
+    owner: root
+    group: root
+  when: rockyou_txt_stat.stat.exists or gunzip_result.changed
+
+- name: Verify rockyou.txt was created successfully
+  stat:
+    path: "{{ rockyou_txt }}"
+  register: final_check
+
+- name: Display success message
+  debug:
+    msg: "rockyou.txt successfully extracted to {{ rockyou_txt }}"
+  when: final_check.stat.exists
+
+- name: Display file size information
+  shell: "ls -lh {{ rockyou_txt }}"
+  register: file_info
+  when: final_check.stat.exists
+
+- name: Show file details
+  debug:
+    msg: "{{ file_info.stdout }}"
+  when: final_check.stat.exists

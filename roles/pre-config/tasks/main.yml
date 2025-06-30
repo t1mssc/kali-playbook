@@ -1,0 +1,4 @@
+---
+- include_tasks: config-timezone.yml
+- include_tasks: config-packages.yml
+- include_tasks: config-terminal.yml

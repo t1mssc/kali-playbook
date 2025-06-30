@@ -1,0 +1,26 @@
+---
+- name: Update package cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  tags:
+    - update
+    - system
+  become: true
+
+- name: Install packages
+  apt:
+    name: "{{ packages }}"
+    state: present
+  become: true
+  become_method: sudo
+
+- name: Ensure pipx is properly configured
+  shell: |
+    pipx ensurepath
+  become: no
+  become_user: "{{ ansible_user_id }}"
+  ignore_errors: yes
+  tags:
+    - packages
+    - pipx

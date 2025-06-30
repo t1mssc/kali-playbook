@@ -1,0 +1,39 @@
+---
+- name: Enable and start PostgreSQL service
+  ansible.builtin.systemd:
+    name: postgresql.service
+    state: started
+    enabled: true
+  register: postgresql_result
+  failed_when: false
+
+- name: Check PostgreSQL service status
+  ansible.builtin.systemd:
+    name: postgresql.service
+  register: postgresql_status
+  when: postgresql_result.failed | default(false)
+
+- name: Display PostgreSQL error if service failed
+  ansible.builtin.debug:
+    msg: "Warning: PostgreSQL service failed to start - {{ postgresql_result.msg | default('Unknown error') }}"
+  when: postgresql_result.failed | default(false)
+
+- name: Check msfdb status
+  ansible.builtin.command: msfdb status
+  register: msfdb_status
+  changed_when: false
+  failed_when: false
+
+- name: Initialize msfdb if not configured
+  ansible.builtin.command: msfdb init
+  register: msfdb_init_result
+  when: >
+    msfdb_status.rc != 0 or 
+    'No configuration file found' in msfdb_status.stdout or
+    'not configured' in msfdb_status.stdout
+  failed_when: false
+
+- name: Display msfdb initialization result
+  ansible.builtin.debug:
+    msg: "msfdb initialization: {{ 'successful' if msfdb_init_result.rc == 0 else 'failed - ' + (msfdb_init_result.stderr | default('Unknown error')) }}"
+  when: msfdb_init_result is defined
