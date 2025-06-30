@@ -1,4 +1,5 @@
 ---
+# Burp Suite Certificate
 - name: "Check if BurpSuiteCA.der exists"
   stat:
     path: /usr/local/share/ca-certificates/BurpSuiteCA.der
@@ -24,7 +25,6 @@
     group: root
     mode: 0644
   become: true
-  become_method: sudo
   when: burp_cert.stat.exists == False
 
 - name: Create directory for Burp Suite extras
@@ -33,7 +33,6 @@
     state: directory
     mode: '0755'
   become: true
-  become_method: sudo
 
 - name: Download jar files
   ansible.builtin.get_url:
@@ -42,10 +41,15 @@
     checksum: "{{ item.value.checksum }}"
     mode: '0644'
   become: true
-  become_method: sudo
   loop: "{{ lookup('dict', burpsuite_extras_jars) }}"
   
 - name: Copy BurpSuite Community Config
   template:
     src: "templates/ConfigCommunity.json.j2"
     dest: "{{ ansible_env.HOME }}/.BurpSuite/ConfigCommunity.json"
+  
+- name: "Updating Firefox Policies"
+  template: 
+    src: "templates/policy.json.j2"
+    dest: "/usr/share/firefox-esr/distribution/policies.json"
+  become: true

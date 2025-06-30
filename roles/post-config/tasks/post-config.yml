@@ -1,0 +1,12 @@
+---
+- name: Remove useless packages from cache
+  apt:
+    autoclean: true 
+  become: true
+
+- name: Restart QTerminal processes (if running)
+  shell: |
+    pkill -f qterminal || true
+  ignore_errors: yes
+  become: yes
+  become_user: kali

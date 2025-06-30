@@ -1,5 +1,10 @@
 ---
-- include_tasks: config-rockyou.yml
-- include_tasks: config-burp.yml
-- include_tasks: config-firefox.yml
-- include_tasks: config-metasploit.yml
+- name: Unzipping of rockyou.txt.gz
+  become: true
+  import_tasks: config-rockyou.yml
+
+- name: Configuration of Burpsuite and Firefox
+  import_tasks: config-browser.yml
+
+- name: Clean up and Restarting Terminal
+  import_tasks: post-config.yml

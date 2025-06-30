@@ -25,8 +25,7 @@
   tags:
     - vscode
     - dependencies
-  become: true
-  become_method: sudo
+  # become: true
 
 - name: Download Microsoft GPG key
   get_url:
@@ -37,8 +36,7 @@
   tags:
     - vscode
     - gpg
-  become: true
-  become_method: sudo
+  # become: true
 
 - name: Add Microsoft GPG key
   shell: |
@@ -48,8 +46,7 @@
   tags:
     - vscode
     - gpg
-  become: true
-  become_method: sudo
+  # become: true
 
 - name: Add Visual Studio Code repository
   apt_repository:
@@ -60,8 +57,7 @@
   tags:
     - vscode
     - repository
-  become: true
-  become_method: sudo
+  # become: true
 
 - name: Update package cache after adding VSCode repository
   apt:
@@ -70,8 +66,7 @@
   tags:
     - vscode
     - update
-  become: true
-  become_method: sudo
+  # become: true
 
 - name: Install Visual Studio Code
   apt:
@@ -81,4 +76,4 @@
   tags:
     - vscode
     - install
-  become: true
+  # become: true

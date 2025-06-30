@@ -17,7 +17,7 @@
   args:
     creates: "{{ ansible_env.HOME }}/.local/bin"
 
-- name: Source bashrc to update PATH
+- name: Source zshrc to update PATH
   become: no
   shell: source {{ ansible_env.HOME }}/.zshrc
   args:
@@ -36,99 +36,19 @@
   with_items:
     - "{{ ansible_user_id }}\tALL=(ALL) NOPASSWD:ALL"
 
-# Configuration for tmux
-- name: Ensure Tmux is installed.
-  ansible.builtin.apt:
-    name: "tmux"
-    state: present
-  become: true
-
-- name: Set .tmux.conf settings
-  ansible.builtin.template:
-    src: templates/tmux.conf.j2
-    dest: "{{ ansible_env.HOME }}/.tmux.conf"
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_id }}"
-
-- name: Ensure .tmux directory exists
-  ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/.tmux/"
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_id }}"
-    state: directory
-
-- name: Ensure tmux plugins directory exists
-  ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/.tmux/plugins/"
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_id }}"
-    state: directory
-
-- name: Install TPM to handle tmux tmux-plugins
-  ansible.builtin.git:
-    repo: https://github.com/tmux-plugins/tpm
-    dest: "{{ ansible_env.HOME }}/.tmux/plugins/tpm"
-
-- name: Run Tmux TPM post install script
-  ansible.builtin.shell: "{{ ansible_env.HOME }}/.tmux/plugins/tpm/bin/install_plugins"
-  args:
-    executable: /bin/zsh
-
 # Configuration for terminal transparency
+- name: Create qterminal_bookmarks.xml file
+  file:
+    path: "{{ ansible_env.HOME }}/.config/qterminal.org/qterminal_bookmarks.xml"
+    state: touch
+    owner: kali
+    group: kali
+    mode: '0644'
+
 - name: Set QTerminal transparency
   ansible.builtin.template:
     src: templates/qterminal.ini.j2
     dest: "{{ ansible_env.HOME }}/.config/qterminal.org/qterminal.ini"
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_id }}"
-
-# Installation of powerlevel10k
-- name: Ensure fonts directory exists
-  file:
-    path: "{{ ansible_env.HOME }}/.fonts"
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_id }}"
-    state: directory
-
-- name: Install MesloLGS NF fonts
-  ansible.builtin.get_url:
-    url: "{{ item.url }}"
-    dest: "{{ item.dest }}"
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_id }}"
     mode: 0644
-  loop: "{{ fonts }}"
-
-- name: rebuild system font cache
-  ansible.builtin.shell: fc-cache -f -v
-
-- name: Touch zshhistory
-  ansible.builtin.file:
-    state: touch
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_id }}"
-    path: "{{ ansible_env.HOME }}/.cache/zshhistory"
-
-- name: Git clone Powerlevel10k
-  git:
-    repo: https://github.com/romkatv/powerlevel10k.git
-    dest: "/opt/powerlevel10k"
-    depth: 1
-    update: true
-    force: true
-  become: true
-
-- name: Ensure powerlvl10k zsh theme to zshrc - User
-  ansible.builtin.lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    regexp: "^source /opt/powerlevel10k/powerlevel10k.zsh-theme"
-    insertafter: "EOF"
-    line: "source /opt/powerlevel10k/powerlevel10k.zsh-theme"
-
-- name: Ensure powerlvl10k zsh theme to zshrc - Root
-  ansible.builtin.lineinfile:
-    path: "/root/.zshrc"
-    regexp: "^source /opt/powerlevel10k/powerlevel10k.zsh-theme"
-    insertafter: "EOF"
-    line: "source /opt/powerlevel10k/powerlevel10k.zsh-theme"
-  become: true

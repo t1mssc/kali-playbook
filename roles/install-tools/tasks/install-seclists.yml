@@ -9,8 +9,7 @@
   tags:
     - security_tools
     - seclists
-  become: true
-  become_method: sudo
+  # become: true
 
 - name: Set proper ownership for SecLists
   file:
@@ -21,8 +20,7 @@
   tags:
     - security_tools
     - seclists
-  become: true
-  become_method: sudo
+  # become: true
 
 - name: Create symlink for easy access to SecLists
   file:
@@ -32,5 +30,4 @@
   tags:
     - security_tools
     - seclists
-  become: true
-  become_method: sudo
+  # become: true

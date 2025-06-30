@@ -1,0 +1,50 @@
+# Installation of powerlevel10k
+- name: Ensure fonts directory exists
+  file:
+    path: "{{ ansible_env.HOME }}/.fonts"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    state: directory
+
+- name: Install MesloLGS NF fonts
+  ansible.builtin.get_url:
+    url: "{{ item.url }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: 0644
+  loop: "{{ fonts }}"
+
+- name: rebuild system font cache
+  ansible.builtin.shell: fc-cache -f -v
+
+- name: Touch zshhistory
+  ansible.builtin.file:
+    state: touch
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    path: "{{ ansible_env.HOME }}/.cache/zshhistory"
+
+- name: Git clone Powerlevel10k
+  git:
+    repo: https://github.com/romkatv/powerlevel10k.git
+    dest: "/opt/powerlevel10k"
+    depth: 1
+    update: true
+    force: true
+  # become: true
+
+- name: Ensure powerlvl10k zsh theme to zshrc - User
+  ansible.builtin.lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    regexp: "^source /opt/powerlevel10k/powerlevel10k.zsh-theme"
+    insertafter: "EOF"
+    line: "source /opt/powerlevel10k/powerlevel10k.zsh-theme"
+
+- name: Ensure powerlvl10k zsh theme to zshrc - Root
+  ansible.builtin.lineinfile:
+    path: "/root/.zshrc"
+    regexp: "^source /opt/powerlevel10k/powerlevel10k.zsh-theme"
+    insertafter: "EOF"
+    line: "source /opt/powerlevel10k/powerlevel10k.zsh-theme"
+  # become: true

@@ -1,7 +1,15 @@
 ---
-- include_tasks: install-git.yml
-- include_tasks: install-peass.yml
-# - include_tasks: install-obsidian.yml
-- include_tasks: install-vscode.yml
-- include_tasks: install-seclists.yml
-# - include_tasks: install-terminator.yml
+- name: Installing git
+  import_tasks: install-git.yml
+
+- name: Installing LinPeas and WinPeas
+  become: true
+  import_tasks: install-peass.yml
+
+- name: Installing VSCode
+  become: true
+  import_tasks: install-vscode.yml
+
+- name: Installing SecLists
+  become: true
+  import_tasks: install-seclists.yml

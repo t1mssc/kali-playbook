@@ -13,7 +13,6 @@
     name: "{{ packages }}"
     state: present
   become: true
-  become_method: sudo
 
 - name: Ensure pipx is properly configured
   shell: |

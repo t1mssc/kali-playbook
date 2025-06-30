@@ -1,4 +1,17 @@
 ---
-- include_tasks: config-timezone.yml
-- include_tasks: config-packages.yml
-- include_tasks: config-terminal.yml
+# - name: Configure the timezone
+#   import_tasks: config-timezone.yml
+
+- name: Update and Install packages
+  import_tasks: config-packages.yml
+
+- name: Configuration for tmux
+  import_tasks: config-tmux.yml
+
+- name: Configuration for terminal
+  import_tasks: config-terminal.yml
+
+- name: Installation of powerlevel10k
+  become: true
+  import_tasks: config-powerlevel.yml
+  
