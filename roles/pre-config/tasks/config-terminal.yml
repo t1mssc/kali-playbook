@@ -23,8 +23,8 @@
   file:
     path: "{{ ansible_env.HOME }}/.config/qterminal.org/qterminal_bookmarks.xml"
     state: touch
-    owner: kali
-    group: kali
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
     mode: '0644'
   when: not qterminal_bookmarks_file.stat.exists
 
