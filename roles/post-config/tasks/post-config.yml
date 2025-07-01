@@ -10,4 +10,4 @@
     pkill -f qterminal || true
   ignore_errors: yes
   become: yes
-  become_user: kali
+  become_user: "{{ ansible_user_id }}"
