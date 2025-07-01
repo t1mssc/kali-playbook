@@ -62,12 +62,27 @@
     mode: '0755'
   when: not p10k_installed.stat.exists
 
+# Creating backup for original .zshrc configuration
+- name: Create backup directory
+  file:
+    path: "{{ ansible_env.HOME }}/backup/zshrc"
+    state: directory
+    mode: '0755'
+  when: not p10k_installed.stat.exists
+
+- name: Backup existing .zshrc
+  copy:
+    src: "{{ ansible_env.HOME }}/.zshrc"
+    dest: "{{ ansible_env.HOME }}/backup/zshrc/.zshrc.backup.{{ ansible_date_time.epoch }}"
+    backup: yes
+    mode: '0644'
+  when: not p10k_installed.stat.exists
+
 - name: Deploy custom .zshrc configuration
   copy:
     src: files/.zshrc
     dest: "{{ ansible_env.HOME }}/.zshrc"
     mode: '0644'
-    backup: yes
   notify: reload zsh config
   when: not p10k_installed.stat.exists
 
