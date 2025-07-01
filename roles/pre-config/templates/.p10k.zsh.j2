@@ -1,0 +1,89 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+# Load Powerlevel10k configuration
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Prompt elements
+typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
+  os_icon
+  dir
+  vcs
+  prompt_char
+)
+
+typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
+  status
+  command_execution_time
+  background_jobs
+  direnv
+  virtualenv
+  anaconda
+  pyenv
+  goenv
+  nodenv
+  nvm
+  nodeenv
+  rbenv
+  rvm
+  fvm
+  luaenv
+  jenv
+  plenv
+  phpenv
+  scalaenv
+  haskell_stack
+  kubecontext
+  terraform
+  aws
+  aws_eb_env
+  azure
+  gcloud
+  google_app_cred
+  context
+  nordvpn
+  ranger
+  nnn
+  vim_shell
+  midnight_commander
+  nix_shell
+  vi_mode
+  time
+)
+
+# Basic style options
+typeset -g POWERLEVEL9K_MODE='nerdfont-complete'
+typeset -g POWERLEVEL9K_PROMPT_ON_NEWLINE=true
+typeset -g POWERLEVEL9K_RPROMPT_ON_NEWLINE=false
+typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=''
+typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_PREFIX=''
+typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX='❯ '
+typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_SUFFIX=''
+typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_SUFFIX=''
+typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_SUFFIX=''
+
+# Directory styling
+typeset -g POWERLEVEL9K_DIR_FOREGROUND=31
+typeset -g POWERLEVEL9K_DIR_SHORTENED_FOREGROUND=103
+typeset -g POWERLEVEL9K_DIR_ANCHOR_FOREGROUND=39
+typeset -g POWERLEVEL9K_DIR_ANCHOR_BOLD=true
+
+# Git status styling
+typeset -g POWERLEVEL9K_VCS_CLEAN_FOREGROUND=76
+typeset -g POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND=76
+typeset -g POWERLEVEL9K_VCS_MODIFIED_FOREGROUND=178
+
+# Prompt character styling
+typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_VIINS_FOREGROUND=76
+typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_VICMD_FOREGROUND=76
+typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_VIVIS_FOREGROUND=76
+typeset -g POWERLEVEL9K_PROMPT_CHAR_OK_VIOWR_FOREGROUND=76
+
+typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_VIINS_FOREGROUND=196
+typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_VICMD_FOREGROUND=196
+typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_VIVIS_FOREGROUND=196
+typeset -g POWERLEVEL9K_PROMPT_CHAR_ERROR_VIOWR_FOREGROUND=196

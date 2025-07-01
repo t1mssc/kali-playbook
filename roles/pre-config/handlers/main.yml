@@ -1,2 +1,8 @@
 ---
 # handlers file for pre-config
+- name: reload zsh config
+  shell: source ~/.zshrc
+  args:
+    executable: /bin/zsh
+  ignore_errors: yes
+  changed_when: false

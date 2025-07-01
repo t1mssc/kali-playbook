@@ -7,19 +7,25 @@
     - update
     - system
   become: true
+  become_method: sudo
 
 - name: Install packages
   apt:
     name: "{{ packages }}"
     state: present
   become: true
+  become_method: sudo
 
 - name: Ensure pipx is properly configured
   shell: |
     pipx ensurepath
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> {{ ansible_env.HOME }}/.zshrc
+  args:
+    creates: "{{ ansible_env.HOME }}/.local/bin"
   become: no
   become_user: "{{ ansible_user_id }}"
   ignore_errors: yes
   tags:
     - packages
     - pipx
+  when: ansible_user_id is defined and ansible_user_gid is defined

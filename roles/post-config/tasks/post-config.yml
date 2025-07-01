@@ -3,6 +3,7 @@
   apt:
     autoclean: true 
   become: true
+  become_method: sudo
 
 - name: Restart QTerminal processes (if running)
   shell: |

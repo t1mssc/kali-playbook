@@ -25,6 +25,7 @@
     group: root
     mode: 0644
   become: true
+  become_method: sudo
   when: burp_cert.stat.exists == False
 
 - name: Create directory for Burp Suite extras
@@ -33,6 +34,7 @@
     state: directory
     mode: '0755'
   become: true
+  become_method: sudo
 
 - name: Download jar files
   ansible.builtin.get_url:
@@ -41,6 +43,7 @@
     checksum: "{{ item.value.checksum }}"
     mode: '0644'
   become: true
+  become_method: sudo
   loop: "{{ lookup('dict', burpsuite_extras_jars) }}"
   
 - name: Copy BurpSuite Community Config
@@ -53,3 +56,4 @@
     src: "templates/policy.json.j2"
     dest: "/usr/share/firefox-esr/distribution/policies.json"
   become: true
+  become_method: sudo

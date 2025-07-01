@@ -4,7 +4,8 @@
     path: "{{ download_dir }}"
     state: directory
     mode: "0755"
-  # become: true
+  become: true
+  become_method: sudo
 
 - name: Get latest release information from GitHub API
   uri:
@@ -61,7 +62,8 @@
     path: "{{ download_dir }}/.version"
     state: directory
     mode: "0755"
-  # become: true
+  become: true
+  become_method: sudo
 
 - name: Check current installed version
   slurp:
@@ -85,7 +87,8 @@
     dest: "{{ download_dir }}/linpeas.sh"
     mode: "0755"
     force: yes
-  # become: true
+  become: true
+  become_method: sudo
   when: linpeas_url is defined and (not linpeas_stat.stat.exists or current_version != latest_tag)
 
 - name: Download WinPEAS executable if new version available or missing
@@ -94,7 +97,8 @@
     dest: "{{ download_dir }}/winPEASx64.exe"
     mode: "0755"
     force: yes
-  # become: true
+  become: true
+  become_method: sudo
   when: winpeas_exe_url is defined and (not winpeas_exe_stat.stat.exists or current_version != latest_tag)
 
 - name: Download WinPEAS batch script if new version available or missing
@@ -103,7 +107,8 @@
     dest: "{{ download_dir }}/winPEAS.bat"
     mode: "0755"
     force: yes
-  # become: true
+  become: true
+  become_method: sudo
   when: winpeas_bat_url is defined and (not winpeas_bat_stat.stat.exists or current_version != latest_tag)
 
 - name: Update version tracking file
@@ -111,7 +116,8 @@
     content: "{{ latest_tag }}"
     dest: "{{ download_dir }}/.version/current_version.txt"
     mode: "0644"
-  # become: true
+  become: true
+  become_method: sudo
   when: current_version != latest_tag
 
 - name: Create symbolic links in /usr/local/bin (requires sudo)
@@ -120,7 +126,8 @@
     dest: "/usr/local/bin/linpeas"
     state: link
     force: yes
-  # become: true
+  become: true
+  become_method: sudo
   when: linpeas_url is defined
   ignore_errors: yes
 
@@ -148,7 +155,8 @@
     path: "{{ item }}"
     mode: "0755"
     state: file
-  # become: true
+  become: true
+  become_method: sudo
   loop:
     - "{{ download_dir }}/linpeas.sh"
     - "{{ download_dir }}/winPEASx64.exe"
@@ -177,4 +185,5 @@
       To update, simply run this playbook again.
     dest: "{{ download_dir }}/README.txt"
     mode: "0644"
-  # become: true
+  become: true
+  become_method: sudo

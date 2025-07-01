@@ -4,6 +4,7 @@
     name: "tmux"
     state: present
   become: true
+  become_method: sudo
 
 - name: Set .tmux.conf settings
   ansible.builtin.template:
@@ -31,7 +32,13 @@
     repo: https://github.com/tmux-plugins/tpm
     dest: "{{ ansible_env.HOME }}/.tmux/plugins/tpm"
 
+- name: Check if TPM plugin (e.g. tmux-sensible) is already installed
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.tmux/plugins/tmux-sensible"
+  register: tmux_plugin_installed
+
 - name: Run Tmux TPM post install script
   ansible.builtin.shell: "{{ ansible_env.HOME }}/.tmux/plugins/tpm/bin/install_plugins"
   args:
     executable: /bin/zsh
+  when: not tmux_plugin_installed.stat.exists

@@ -19,13 +19,14 @@
     path: "{{ rockyou_txt }}"
   register: rockyou_txt_stat
 
-- name: Unzip rockyou.txt.gz using gunzip (recommended method)
+- name: Unzip rockyou.txt.gz using gunzip
   command: gunzip "{{ rockyou_gz }}"
   args:
     creates: "{{ rockyou_txt }}"
   when: rockyou_gz_stat.stat.exists and not rockyou_txt_stat.stat.exists
   register: gunzip_result
-  # become: true
+  become: true
+  become_method: sudo
 
 - name: Set proper permissions on rockyou.txt
   file:

@@ -1,6 +1,6 @@
 ---
-# - name: Configure the timezone
-#   import_tasks: config-timezone.yml
+- name: Configure the timezone
+  import_tasks: config-timezone.yml
 
 - name: Update and Install packages
   import_tasks: config-packages.yml
@@ -12,6 +12,5 @@
   import_tasks: config-terminal.yml
 
 - name: Installation of powerlevel10k
-  become: true
   import_tasks: config-powerlevel.yml
   

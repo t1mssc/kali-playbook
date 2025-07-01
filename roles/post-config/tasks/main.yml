@@ -1,6 +1,5 @@
 ---
 - name: Unzipping of rockyou.txt.gz
-  become: true
   import_tasks: config-rockyou.yml
 
 - name: Configuration of Burpsuite and Firefox

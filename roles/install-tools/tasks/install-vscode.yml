@@ -1,0 +1,18 @@
+---
+# Install Visual Studio Code with gantsign.visual-studio-code role
+# This role installs Visual Studio Code and its extensions for specified users.
+- name: Check if VS Code is already installed
+  command: code --version
+  register: vscode_installed
+  ignore_errors: yes
+
+- name: Install VS Code
+  ansible.builtin.include_role:
+    name: gantsign.visual-studio-code
+  vars:
+    users: 
+      - username: "{{ ansible_user_id }}"
+        visual_studio_code_extensions:
+          - ms-python.python
+          - github.copilot
+  when: vscode_installed.rc != 0

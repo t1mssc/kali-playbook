@@ -1,5 +1,37 @@
 ---
-- name: Set timezone to Asia/Manila
-  community.general.timezone:
-    name: Asia/Manila
+- name: Ensure /etc/localtime is set to Asia/Manila
+  ansible.builtin.file:
+    src: /usr/share/zoneinfo/Asia/Manila
+    dest: /etc/localtime
+    state: link
   become: true
+  become_method: sudo
+  when: ansible_date_time.tz != 'Asia/Manila'
+
+- name: Ensure /etc/timezone is set to Asia/Manila
+  ansible.builtin.copy:
+    content: "Asia/Manila\n"  
+    dest: /etc/timezone
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  become_method: sudo
+  when: ansible_date_time.tz != 'Asia/Manila'
+
+- name: Check current timezone
+  ansible.builtin.command: timedatectl show --property=Timezone --value
+  register: current_timezone
+  changed_when: false
+
+- name: Ensure systemd-timesyncd is enabled and running
+  ansible.builtin.systemd:
+    name: systemd-timesyncd
+    enabled: true
+    state: started
+  become: true
+  become_method: sudo
+  when: ansible_date_time.tz != 'Asia/Manila'
+
+
+      

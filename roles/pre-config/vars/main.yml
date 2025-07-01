@@ -24,17 +24,9 @@ packages:
   - htop
   - tree
   - firefox-esr
+  - zsh-syntax-highlighting
+  - zsh-autosuggestions
 
-# Aliases
-zsh_aliases:
-  - "alias ll='ls -alF'"
-  - "alias la='ls -A'"
-  - "alias l='ls -CF'"
-  - "alias linpeas='/opt/peass-ng/linpeas.sh'"
-  - "alias seclists='cd /opt/SecLists'"
-  - "alias peass='cd /opt/peass-ng'"
-
-# Define fonts to install
 fonts:
   # MesloLGS NF
   - url: https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf

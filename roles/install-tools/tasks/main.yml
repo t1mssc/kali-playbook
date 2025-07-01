@@ -3,9 +3,10 @@
   import_tasks: install-git.yml
 
 - name: Installing LinPeas and WinPeas
-  become: true
   import_tasks: install-peass.yml
 
 - name: Installing SecLists
-  become: true
   import_tasks: install-seclists.yml
+
+- name: Installing VS Code
+  import_tasks: install-vscode.yml

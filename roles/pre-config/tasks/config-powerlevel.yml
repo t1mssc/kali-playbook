@@ -1,10 +1,16 @@
 # Installation of powerlevel10k
+- name: Check if powerlevel10k is already installed
+  stat:
+    path: "/opt/powerlevel10k"
+  register: p10k_installed
+
 - name: Ensure fonts directory exists
   file:
     path: "{{ ansible_env.HOME }}/.fonts"
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_id }}"
     state: directory
+  when: not p10k_installed.stat.exists
 
 - name: Install MesloLGS NF fonts
   ansible.builtin.get_url:
@@ -14,9 +20,11 @@
     group: "{{ ansible_user_id }}"
     mode: 0644
   loop: "{{ fonts }}"
+  when: not p10k_installed.stat.exists
 
 - name: rebuild system font cache
   ansible.builtin.shell: fc-cache -f -v
+  when: not p10k_installed.stat.exists
 
 - name: Touch zshhistory
   ansible.builtin.file:
@@ -24,6 +32,7 @@
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_id }}"
     path: "{{ ansible_env.HOME }}/.cache/zshhistory"
+  when: not p10k_installed.stat.exists
 
 - name: Git clone Powerlevel10k
   git:
@@ -32,7 +41,35 @@
     depth: 1
     update: true
     force: true
-  # become: true
+  become: true
+  become_method: sudo
+  when: not p10k_installed.stat.exists
+
+- name: Create .p10k.zsh configuration
+  template:
+    src: templates/.p10k.zsh.j2
+    dest: "{{ ansible_env.HOME }}/.p10k.zsh"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: '0644'
+  become_user: "{{ ansible_user_id }}"
+  when: not p10k_installed.stat.exists
+
+- name: Create .cache directory for zsh
+  file:
+    path: "{{ ansible_env.HOME }}/.cache"
+    state: directory
+    mode: '0755'
+  when: not p10k_installed.stat.exists
+
+- name: Deploy custom .zshrc configuration
+  copy:
+    src: files/.zshrc
+    dest: "{{ ansible_env.HOME }}/.zshrc"
+    mode: '0644'
+    backup: yes
+  notify: reload zsh config
+  when: not p10k_installed.stat.exists
 
 - name: Ensure powerlvl10k zsh theme to zshrc - User
   ansible.builtin.lineinfile:
@@ -40,6 +77,7 @@
     regexp: "^source /opt/powerlevel10k/powerlevel10k.zsh-theme"
     insertafter: "EOF"
     line: "source /opt/powerlevel10k/powerlevel10k.zsh-theme"
+  when: not p10k_installed.stat.exists
 
 - name: Ensure powerlvl10k zsh theme to zshrc - Root
   ansible.builtin.lineinfile:
@@ -47,4 +85,5 @@
     regexp: "^source /opt/powerlevel10k/powerlevel10k.zsh-theme"
     insertafter: "EOF"
     line: "source /opt/powerlevel10k/powerlevel10k.zsh-theme"
-  # become: true
+  become: true
+  when: not p10k_installed.stat.exists

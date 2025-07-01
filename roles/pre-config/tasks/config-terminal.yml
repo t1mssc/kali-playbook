@@ -1,28 +1,4 @@
 ---
-# Configuration for aliases
-- name: Add useful aliases to zshrc
-  become: no
-  lineinfile:
-    path: "{{ ansible_env.HOME }}/.zshrc"
-    line: "{{ item }}"
-    create: yes
-  loop: "{{ zsh_aliases }}"
-
-# Configuration for pipx
-- name: Ensure pipx is properly configured for user
-  become: no
-  shell: |
-    pipx ensurepath
-    echo 'export PATH="$HOME/.local/bin:$PATH"' >> {{ ansible_env.HOME }}/.zshrc
-  args:
-    creates: "{{ ansible_env.HOME }}/.local/bin"
-
-- name: Source zshrc to update PATH
-  become: no
-  shell: source {{ ansible_env.HOME }}/.zshrc
-  args:
-    executable: /bin/zsh
-
 # Configuration for sudoers
 - name: Add NOPASSWD rule for the current user
   become: true
@@ -37,6 +13,12 @@
     - "{{ ansible_user_id }}\tALL=(ALL) NOPASSWD:ALL"
 
 # Configuration for terminal transparency
+- name: Check if qterminal_bookmarks.xml exists
+  stat:
+    path: "{{ ansible_env.HOME }}/.config/qterminal.org/qterminal_bookmarks.xml"
+  register: qterminal_bookmarks_file
+
+
 - name: Create qterminal_bookmarks.xml file
   file:
     path: "{{ ansible_env.HOME }}/.config/qterminal.org/qterminal_bookmarks.xml"
@@ -44,6 +26,7 @@
     owner: kali
     group: kali
     mode: '0644'
+  when: not qterminal_bookmarks_file.stat.exists
 
 - name: Set QTerminal transparency
   ansible.builtin.template:
