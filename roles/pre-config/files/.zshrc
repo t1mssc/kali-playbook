@@ -131,30 +131,29 @@ if [ "$color_prompt" = yes ]; then
         . /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
         typeset -A ZSH_HIGHLIGHT_STYLES
         ZSH_HIGHLIGHT_STYLES[default]=none
-        ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=red,bold
+        ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=red,bold # Changed to fg=red,bold
         ZSH_HIGHLIGHT_STYLES[reserved-word]=fg=cyan,bold
         ZSH_HIGHLIGHT_STYLES[suffix-alias]=fg=green,underline
-        ZSH_HIGHLIGHT_STYLES[global-alias]=fg=magenta
-        ZSH_HIGHLIGHT_STYLES[precommand]=fg=green
+        ZSH_HIGHLIGHT_STYLES[global-alias]=fg=magenta # Changed to fg=magenta
+        ZSH_HIGHLIGHT_STYLES[precommand]=fg=green # Remove underline
         ZSH_HIGHLIGHT_STYLES[commandseparator]=fg=blue,bold
-        ZSH_HIGHLIGHT_STYLES[autodirectory]=fg=green,bold,underline
-        ZSH_HIGHLIGHT_STYLES[path]=fg=blue,underline
-        ZSH_HIGHLIGHT_STYLES[path_prefix]=fg=blue
-        ZSH_HIGHLIGHT_STYLES[path_approx]=fg=yellow,underline
-        ZSH_HIGHLIGHT_STYLES[path_pathseparator]=fg=cyan
-        ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]=fg=cyan
-        ZSH_HIGHLIGHT_STYLES[builtin]=fg=green,bold
-        ZSH_HIGHLIGHT_STYLES[function]=fg=green
-        ZSH_HIGHLIGHT_STYLES[command]=fg=green
-        ZSH_HIGHLIGHT_STYLES[alias]=fg=green,underline
-        ZSH_HIGHLIGHT_STYLES[hashed-command]=fg=green
-        ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=fg=magenta
-        ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=fg=magenta
+        ZSH_HIGHLIGHT_STYLES[autodirectory]=fg=green,bold,underline # Added bold
+        ZSH_HIGHLIGHT_STYLES[path]=fg=blue,underline # Added fg-blue and underline
+        ZSH_HIGHLIGHT_STYLES[path_prefix]=fg=blue,bold # New added ZSH_HIGHLIGHT_STYLES
+        ZSH_HIGHLIGHT_STYLES[path_approx]=fg=yellow,underline # New added ZSH_HIGHLIGHT_STYLES
+        ZSH_HIGHLIGHT_STYLES[path_pathseparator]=fg=cyan # Added fg=cyan
+        ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]=fg=cyan # Added fg=cyan
+        ZSH_HIGHLIGHT_STYLES[builtin]=fg=green # New added ZSH_HIGHLIGHT_STYLES
+        ZSH_HIGHLIGHT_STYLES[function]=fg=green # New added ZSH_HIGHLIGHT_STYLES
+        ZSH_HIGHLIGHT_STYLES[alias]=fg=green,underline # New added ZSH_HIGHLIGHT_STYLES
+        ZSH_HIGHLIGHT_STYLES[hashed-command]=fg=green # New added ZSH_HIGHLIGHT_STYLES
+        ZSH_HIGHLIGHT_STYLES[single-hyphen-option]=fg=magenta # Change to fg-magenta
+        ZSH_HIGHLIGHT_STYLES[double-hyphen-option]=fg=magenta # Change to fg-magenta
         ZSH_HIGHLIGHT_STYLES[arg0]=fg=cyan
         ZSH_HIGHLIGHT_STYLES[single-quoted-argument]=fg=yellow
         ZSH_HIGHLIGHT_STYLES[double-quoted-argument]=fg=yellow
         ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]=fg=yellow
-        ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=fg=yellow
+        ZSH_HIGHLIGHT_STYLES[back-quoted-argument]=fg=yellow # Changed to fg=yellow
         ZSH_HIGHLIGHT_STYLES[back-quoted-argument-delimiter]=fg=blue,bold
         ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]=fg=magenta,bold
         ZSH_HIGHLIGHT_STYLES[back-double-quoted-argument]=fg=magenta,bold
@@ -163,9 +162,9 @@ if [ "$color_prompt" = yes ]; then
         ZSH_HIGHLIGHT_STYLES[globbing]=fg=blue,bold
         ZSH_HIGHLIGHT_STYLES[history-expansion]=fg=blue,bold
         ZSH_HIGHLIGHT_STYLES[command-substitution]=none
-        ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter]=fg=magenta
+        ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter]=fg=magenta # Removed bold
         ZSH_HIGHLIGHT_STYLES[process-substitution]=none
-        ZSH_HIGHLIGHT_STYLES[process-substitution-delimiter]=fg=magenta
+        ZSH_HIGHLIGHT_STYLES[process-substitution-delimiter]=fg=magenta # Removed bold
         ZSH_HIGHLIGHT_STYLES[assign]=none
         ZSH_HIGHLIGHT_STYLES[redirection]=fg=blue,bold
         ZSH_HIGHLIGHT_STYLES[comment]=fg=black,bold
@@ -177,9 +176,9 @@ if [ "$color_prompt" = yes ]; then
         ZSH_HIGHLIGHT_STYLES[bracket-level-3]=fg=magenta,bold
         ZSH_HIGHLIGHT_STYLES[bracket-level-4]=fg=yellow,bold
         ZSH_HIGHLIGHT_STYLES[bracket-level-5]=fg=cyan,bold
-        ZSH_HIGHLIGHT_STYLES[cursor]=standout
-        ZSH_HIGHLIGHT_STYLES[pattern-match]=fg=green,bold
-        ZSH_HIGHLIGHT_STYLES[pattern-not-match]=fg=red,bold
+        ZSH_HIGHLIGHT_STYLES[cursor]=standout # New added ZSH_HIGHLIGHT_STYLES
+        ZSH_HIGHLIGHT_STYLES[pattern-match]=fg=green,bold # New added ZSH_HIGHLIGHT_STYLES
+        ZSH_HIGHLIGHT_STYLES[pattern-not-match]=fg=red,bold # New added ZSH_HIGHLIGHT_STYLES
         ZSH_HIGHLIGHT_STYLES[cursor-matchingbracket]=standout
     fi
 else
