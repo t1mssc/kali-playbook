@@ -18,14 +18,6 @@
     path: "{{ ansible_env.HOME }}/.config/qterminal.org/qterminal_bookmarks.xml"
   register: qterminal_bookmarks_file
 
-# - name: Create qterminal_bookmarks.xml file
-#   file:
-#     path: "{{ ansible_env.HOME }}/.config/qterminal.org/qterminal_bookmarks.xml"
-#     state: touch
-#     owner: "{{ ansible_user_id }}"
-#     group: "{{ ansible_user_id }}"
-#     mode: '0644'
-#   when: not qterminal_bookmarks_file.stat.exists
 
 - name: Set QTerminal transparency
   ansible.builtin.template:
@@ -34,3 +26,4 @@
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_id }}"
     mode: 0644
+  when: not qterminal_bookmarks_file.stat.exists

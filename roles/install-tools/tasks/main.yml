@@ -8,5 +8,5 @@
 - name: Installing SecLists
   import_tasks: install-seclists.yml
 
-# - name: Installing VS Code
-#   import_tasks: install-vscode.yml
+- name: Installing VS Code
+  import_tasks: install-vscode.yml
