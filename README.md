@@ -1,6 +1,20 @@
 # Kali Linux Customize
 
-The setup installs all the basic tools you need, adds useful apps like Obsidian and Terminator, sets up browser extensions for security testing, and downloads tools like SecLists and PEASS-ng. It also updates the system, adds handy shortcuts, and ensuring everything is ready for use with minimal manual effort.
+# Setup Summary
+
+This setup script automates the configuration of a Kali Linux environment for penetration testing and development. It includes:
+
+- **Tool Installation**: Installs essential tools like `gobuster`, `ncat`, `zaproxy`, `golang-go`, and `vscode`.
+- **Wordlists**: Automatically unzips `rockyou.txt.gz` and clones the `SecLists` repository to `/opt/SecLists`.
+- **PEASS Tools**: Download `LinPEAS`, and `WinPEAS` for privilege escalation testing.
+- **Terminal Setup**: Configures the shell with the **Powerlevel10k** theme for an enhanced CLI experience.
+- **Firefox Configuration**: 
+  - Installs **Wappalyzer** and **FoxyProxy** extensions.
+  - Sets up a FoxyProxy profile pointing to Burp Suite (`127.0.0.1:8080`).
+  - Imports the **Burp Suite CA certificate** into Firefox for SSL interception.
+- **Visual Studio Code**: Downloads and installs **VSCode** for development and editing.
+
+This environment is designed for smooth workflow.
 
 ## Requirements
 
