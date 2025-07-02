@@ -35,7 +35,7 @@ bind P paste-buffer
 bind -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "pbcopy"
 
 # Set 256 colors
-set -s default-terminal 'tmux-256color'
+set -g default-terminal 'tmux-256color'
 
 # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
 run '~/.tmux/plugins/tpm/tpm'
