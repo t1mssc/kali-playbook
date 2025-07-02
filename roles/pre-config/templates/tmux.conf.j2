@@ -13,6 +13,20 @@ set -g @plugin 'arcticicestudio/nord-tmux'
 
 set -g @plugin 'tmux-plugins/tmux-yank'
 
+# Split Commands
+bind-key "|" split-window -h -c "#{pane_current_path}"
+bind-key "\\" split-window -fh -c "#{pane_current_path}"
+
+bind-key "-" split-window -v -c "#{pane_current_path}"
+bind-key "_" split-window -fv -c "#{pane_current_path}"
+
+# Swapping Windows
+bind -r "<" swap-window -d -t -1
+bind -r ">" swap-window -d -t +1
+
+# Keep current path
+bind c new-window -c "#{pane_current_path}"
+
 # Set 256 colors
 set -s default-terminal 'tmux-256color'
 

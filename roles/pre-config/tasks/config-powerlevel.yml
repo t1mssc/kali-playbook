@@ -22,7 +22,7 @@
   loop: "{{ fonts }}"
   when: not p10k_installed.stat.exists
 
-- name: rebuild system font cache
+- name: Rebuild system font cache
   ansible.builtin.shell: fc-cache -f -v
   when: not p10k_installed.stat.exists
 
@@ -46,21 +46,22 @@
   when: not p10k_installed.stat.exists
 
 - name: Create .p10k.zsh configuration
-  template:
-    src: templates/.p10k.zsh.j2
+  copy:
+    src: files/.p10k.zsh
     dest: "{{ ansible_env.HOME }}/.p10k.zsh"
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_id }}"
     mode: '0644'
+    force: no
   become_user: "{{ ansible_user_id }}"
   when: not p10k_installed.stat.exists
 
-- name: Create .cache directory for zsh
-  file:
-    path: "{{ ansible_env.HOME }}/.cache"
-    state: directory
-    mode: '0755'
-  when: not p10k_installed.stat.exists
+# - name: Create .cache directory for zsh
+#   file:
+#     path: "{{ ansible_env.HOME }}/.cache"
+#     state: directory
+#     mode: '0755'
+#   when: not p10k_installed.stat.exists
 
 # Creating backup for original .zshrc configuration
 - name: Create backup directory
@@ -85,6 +86,17 @@
     mode: '0644'
   notify: reload zsh config
   when: not p10k_installed.stat.exists
+
+- name: Ensure .zshrc sources .p10k.zsh
+  lineinfile:
+    path: "{{ ansible_env.HOME }}/.zshrc"
+    line: '[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh'
+    insertafter: EOF
+    state: present
+    create: yes
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"
+    mode: '0644'
 
 - name: Ensure powerlvl10k zsh theme to zshrc - User
   ansible.builtin.lineinfile:

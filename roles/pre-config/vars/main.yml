@@ -1,7 +1,4 @@
 ---
-cache_valid_time: 3600
-upgrade_type: dist
-
 # Packages to install
 packages:
   - apt-transport-https
@@ -30,14 +27,14 @@ packages:
 fonts:
   # MesloLGS NF
   - url: https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf
-    dest: "{{ lookup('ansible.builtin.env', 'HOME') }}/.fonts/meslolgs_nf_regular.ttf"
+    dest: "{{ ansible_env.HOME }}/.fonts/meslolgs_nf_regular.ttf"
     mode: "0755"
   - url: https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf
-    dest: "{{ lookup('ansible.builtin.env', 'HOME') }}/.fonts/meslolgs_nf_bold.ttf"
+    dest: "{{ ansible_env.HOME }}/.fonts/meslolgs_nf_bold.ttf"
     mode: "0755"
   - url: https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf
-    dest: "{{ lookup('ansible.builtin.env', 'HOME') }}/.fonts/meslolgs_nf_italic.ttf"
+    dest: "{{ ansible_env.HOME }}/.fonts/meslolgs_nf_italic.ttf"
     mode: "0755"
   - url: https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf
-    dest: "{{ lookup('ansible.builtin.env', 'HOME') }}/.fonts/meslolgs_nf_bold_italic.ttf"
+    dest: "{{ ansible_env.HOME }}/.fonts/meslolgs_nf_bold_italic.ttf"
     mode: "0755"
