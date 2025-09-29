@@ -1,7 +1,4 @@
 ---
-- name: Configure the timezone
-  import_tasks: config-timezone.yml
-
 - name: Update and Install packages
   import_tasks: config-packages.yml
 

@@ -2,9 +2,6 @@
 - name: Installing git
   import_tasks: install-git.yml
 
-- name: Installing LinPeas and WinPeas
-  import_tasks: install-peass.yml
-
 - name: Installing SecLists
   import_tasks: install-seclists.yml
 

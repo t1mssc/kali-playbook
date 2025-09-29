@@ -9,6 +9,15 @@
   become: true
   become_method: sudo
 
+- name: Upgrade all packages
+  apt:
+    upgrade: dist
+    autoremove: yes
+    autoclean: yes
+  tags:
+    - update
+    - system
+
 - name: Install packages
   apt:
     name: "{{ packages }}"
