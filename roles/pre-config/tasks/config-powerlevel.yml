@@ -70,6 +70,7 @@
     dest: "{{ ansible_env.HOME }}/backup/zshrc/.zshrc.backup.{{ ansible_date_time.epoch }}"
     backup: yes
     mode: '0644'
+  become: no
   when: not p10k_installed.stat.exists
 
 - name: Deploy custom .zshrc configuration
@@ -78,6 +79,7 @@
     dest: "{{ ansible_env.HOME }}/.zshrc"
     mode: '0644'
   notify: reload zsh config
+  become: no
   when: not p10k_installed.stat.exists
 
 - name: Ensure .zshrc sources .p10k.zsh
@@ -97,6 +99,7 @@
     regexp: "^source /opt/powerlevel10k/powerlevel10k.zsh-theme"
     insertafter: "EOF"
     line: "source /opt/powerlevel10k/powerlevel10k.zsh-theme"
+  become: no
   when: not p10k_installed.stat.exists
 
 - name: Ensure powerlvl10k zsh theme to zshrc - Root
