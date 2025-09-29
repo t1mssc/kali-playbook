@@ -1,12 +1,9 @@
-# Kali Linux Customize
-
 # Setup Summary
 
 This setup script automates the configuration of a Kali Linux environment for penetration testing and development. It includes:
 
 - **Tool Installation**: Installs essential tools like `gobuster`, `ncat`, `zaproxy`, `golang-go`, and `vscode`.
 - **Wordlists**: Automatically unzips `rockyou.txt.gz` and clones the `SecLists` repository to `/opt/SecLists`.
-- **PEASS Tools**: Download `LinPEAS`, and `WinPEAS` for privilege escalation testing.
 - **Terminal Setup**: Configures the shell with the **Powerlevel10k** theme for an enhanced CLI experience.
 - **Firefox Configuration**: 
   - Installs **Wappalyzer** and **FoxyProxy** extensions.
@@ -25,7 +22,6 @@ pipx install --include-deps ansible
 ## Usage
 - git clone https://github.com/t1mssc/kali-playbook.git 
 - cd kali-playbook
-- ansible-galaxy install -r requirements.yml
 - sudo whoami
 - ansible-playbook main.yml
 
