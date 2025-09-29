@@ -13,15 +13,15 @@
     - "{{ ansible_user_id }}\tALL=(ALL) NOPASSWD:ALL"
 
 # Configuration for terminal transparency
-- name: Check if qterminal_bookmarks.xml exists
-  stat:
-    path: "{{ ansible_env.HOME }}/.config/qterminal.org/qterminal_bookmarks.xml"
-  register: qterminal_bookmarks_file
+# - name: Check if qterminal_bookmarks.xml exists
+#   stat:
+#     path: "{{ ansible_env.HOME }}/.config/qterminal.org/qterminal_bookmarks.xml"
+#   register: qterminal_bookmarks_file
 
-- name: Set QTerminal transparency
-  ansible.builtin.template:
-    src: templates/qterminal.ini.j2
-    dest: "{{ ansible_env.HOME }}/.config/qterminal.org/qterminal.ini"
-    owner: "{{ ansible_user_id }}"
-    group: "{{ ansible_user_id }}"
-    mode: 0644
+# - name: Set QTerminal transparency
+#   ansible.builtin.template:
+#     src: templates/qterminal.ini.j2
+#     dest: "{{ ansible_env.HOME }}/.config/qterminal.org/qterminal.ini"
+#     owner: "{{ ansible_user_id }}"
+#     group: "{{ ansible_user_id }}"
+#     mode: 0644
