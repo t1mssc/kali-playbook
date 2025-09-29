@@ -17,6 +17,8 @@
   tags:
     - update
     - system
+  become: true
+  become_method: sudo
 
 - name: Install packages
   apt:
