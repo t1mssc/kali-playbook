@@ -2,6 +2,7 @@
 - name: Configuration of Kali Linux
   hosts: localhost
   connection: local
+  become: yes
   roles:
     - role: "roles/pre-config"
     - role: "roles/install-tools"
