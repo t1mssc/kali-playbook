@@ -12,7 +12,6 @@
     dest: "{{ ansible_env.HOME }}/.tmux.conf"
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_id }}"
-  become: no
 
 - name: Ensure .tmux directory exists
   ansible.builtin.file:
@@ -20,7 +19,6 @@
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_id }}"
     state: directory
-  become: no
 
 - name: Ensure tmux plugins directory exists
   ansible.builtin.file:
@@ -33,7 +31,6 @@
   ansible.builtin.git:
     repo: https://github.com/tmux-plugins/tpm
     dest: "{{ ansible_env.HOME }}/.tmux/plugins/tpm"
-  become: no
 
 - name: Check if TPM plugin (e.g. tmux-sensible) is already installed
   ansible.builtin.stat:
@@ -45,4 +42,3 @@
   args:
     executable: /bin/zsh
   when: not tmux_plugin_installed.stat.exists
-  become: no
