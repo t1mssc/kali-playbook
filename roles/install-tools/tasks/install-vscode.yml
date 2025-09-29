@@ -1,98 +1,18 @@
 ---
-# Install Visual Studio Code 
-- name: Check if Visual Studio Code is already installed
-  command: which code
-  register: vscode_check
-  failed_when: false
-  changed_when: false
-  tags:
-    - vscode
-    - check
-
-- name: Display VSCode status
-  debug:
-    msg: "Visual Studio Code is {{ 'already installed' if vscode_check.rc == 0 else 'not installed' }}"
-  tags:
-    - vscode
-
-- name: Install dependencies for VSCode
-  apt:
-    name:
-      - wget
-      - gpg
-      - apt-transport-https
-    state: present
-  when: vscode_check.rc != 0
-  tags:
-    - vscode
-    - dependencies
-
-- name: Download Microsoft GPG key
-  get_url:
-    url: https://packages.microsoft.com/keys/microsoft.asc
-    dest: /tmp/microsoft.asc
-    mode: '0644'
-  when: vscode_check.rc != 0
-  tags:
-    - vscode
-    - gpg
-
-- name: Add Microsoft GPG key
-  shell: |
-    gpg --dearmor < /tmp/microsoft.asc > /tmp/packages.microsoft.gpg
-    install -o root -g root -m 644 /tmp/packages.microsoft.gpg /etc/apt/trusted.gpg.d/
-  when: vscode_check.rc != 0
-  tags:
-    - vscode
-    - gpg
-
-- name: Add Visual Studio Code repository
-  apt_repository:
-    repo: "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/trusted.gpg.d/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
-    state: present
-    filename: vscode
-  when: vscode_check.rc != 0
-  tags:
-    - vscode
-    - repository
-
-- name: Update package cache after adding VSCode repository
-  apt:
-    update_cache: yes
-  when: vscode_check.rc != 0
-  tags:
-    - vscode
-    - update
-
-- name: Install Visual Studio Code
-  apt:
-    name: code
-    state: present
-  when: vscode_check.rc != 0
-  tags:
-    - vscode
-    - install
-
-- name: Verify VSCode installation
+- name: Check if VS Code is already installed
   command: code --version
-  register: vscode_version
-  changed_when: false
-  tags:
-    - vscode
-    - verify
-
-- name: Display VSCode version
-  debug:
-    msg: "Visual Studio Code version: {{ vscode_version.stdout_lines[0] }}"
-  tags:
-    - vscode
-
-- name: Install useful VSCode extensions
-  shell: |
-    code --install-extension ms-python.python
-    code --install-extension ms-vscode.powershell
-    code --install-extension streetsidesoftware.code-spell-checker
-    code --install-extension github.copilot
-  become: no
-  become_user: "{{ ansible_user_id }}"
+  register: vscode_installed
   ignore_errors: yes
+
+- name: Install VS Code
+  ansible.builtin.include_role:
+    name: gantsign.visual-studio-code
+  vars:
+    users: 
+      - username: "{{ ansible_user_id }}"
+        visual_studio_code_extensions:
+          - ms-python.python
+          - github.copilot
+          - streetsidesoftware.code-spell-checker
+          - snyk-security.snyk-vulnerability-scanner
+  when: vscode_installed.rc != 0
