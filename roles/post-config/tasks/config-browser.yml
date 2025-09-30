@@ -17,6 +17,7 @@
   shell:
     /tmp/getburpcert.sh
   when: burp_cert.stat.exists == False
+  become: no
 
 - name: "Copying CA Certificate to /usr/local/share/ca-certificates"
   copy:
