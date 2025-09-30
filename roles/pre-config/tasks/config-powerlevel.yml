@@ -1,8 +1,10 @@
+---
 # Installation of powerlevel10k
 - name: Check if powerlevel10k is already installed
   stat:
     path: "/opt/powerlevel10k"
   register: p10k_installed
+  become: no
 
 - name: Ensure fonts directory exists
   file:
@@ -11,6 +13,7 @@
     group: "{{ ansible_user_id }}"
     state: directory
   when: not p10k_installed.stat.exists
+  become: no
 
 - name: Install MesloLGS NF fonts
   ansible.builtin.get_url:
@@ -21,10 +24,12 @@
     mode: 0644
   loop: "{{ fonts }}"
   when: not p10k_installed.stat.exists
+  become: no
 
 - name: Rebuild system font cache
   ansible.builtin.shell: fc-cache -f -v
   when: not p10k_installed.stat.exists
+  become: no
 
 - name: Touch zshhistory
   ansible.builtin.file:
@@ -33,6 +38,7 @@
     group: "{{ ansible_user_id }}"
     path: "{{ ansible_env.HOME }}/.cache/zshhistory"
   when: not p10k_installed.stat.exists
+  become: no
 
 - name: Git clone Powerlevel10k
   git:
@@ -54,6 +60,7 @@
     mode: '0644'
     force: no
   become_user: "{{ ansible_user_id }}"
+  become: no
   when: not p10k_installed.stat.exists
 
 # Creating backup for original .zshrc configuration
@@ -63,6 +70,7 @@
     state: directory
     mode: '0755'
   when: not p10k_installed.stat.exists
+  become: no
 
 - name: Backup existing .zshrc
   copy:
@@ -92,6 +100,7 @@
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_id }}"
     mode: '0644'
+  become: no
 
 - name: Ensure powerlvl10k zsh theme to zshrc - User
   ansible.builtin.lineinfile:
@@ -109,4 +118,5 @@
     insertafter: "EOF"
     line: "source /opt/powerlevel10k/powerlevel10k.zsh-theme"
   become: true
+  become_method: sudo
   when: not p10k_installed.stat.exists

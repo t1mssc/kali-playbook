@@ -3,16 +3,67 @@
   command: code --version
   register: vscode_installed
   ignore_errors: yes
+  become: no
+
+- name: Download VS Code GPG key
+  ansible.builtin.get_url:
+    url: https://packages.microsoft.com/keys/microsoft.asc
+    dest: /tmp/microsoft.asc
+    mode: '0644'
+  become: true
+  become_method: sudo
+  when: vscode_installed.rc != 0
+
+- name: Convert and install VS Code GPG key (modern method)
+  ansible.builtin.shell: |
+    gpg --dearmor < /tmp/microsoft.asc > /usr/share/keyrings/packages.microsoft.gpg
+  args:
+    creates: /usr/share/keyrings/packages.microsoft.gpg
+  become: true
+  become_method: sudo
+  when: vscode_installed.rc != 0
+
+- name: Add VS Code repository with signed-by
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64 signed-by=/usr/share/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main"
+    state: present
+    filename: vscode
+  become: true
+  become_method: sudo
+  when: vscode_installed.rc != 0
+
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+  become: true
+  become_method: sudo
+  when: vscode_installed.rc != 0
 
 - name: Install VS Code
-  ansible.builtin.include_role:
-    name: gantsign.visual-studio-code
-  vars:
-    users: 
-      - username: "{{ ansible_user_id }}"
-        visual_studio_code_extensions:
-          - ms-python.python
-          - github.copilot
-          - streetsidesoftware.code-spell-checker
-          - snyk-security.snyk-vulnerability-scanner
+  ansible.builtin.apt:
+    name: code
+    state: present
+  become: true
+  become_method: sudo
+  when: vscode_installed.rc != 0
+
+- name: Install VS Code extensions
+  ansible.builtin.command:
+    cmd: "code --install-extension {{ item }}"
+  loop:
+    - ms-python.python
+    - github.copilot
+    - streetsidesoftware.code-spell-checker
+    - snyk-security.snyk-vulnerability-scanner
+  become: no
+  become_user: "{{ ansible_user_id }}"
+  when: vscode_installed.rc != 0
+  ignore_errors: yes
+
+- name: Clean up temporary GPG key file
+  ansible.builtin.file:
+    path: /tmp/microsoft.asc
+    state: absent
+  become: true
+  become_method: sudo
   when: vscode_installed.rc != 0

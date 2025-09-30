@@ -4,11 +4,13 @@
     path: "{{ wordlist_dir }}"
     state: directory
     mode: '0755'
+  become: no
 
 - name: Check if rockyou.txt.gz exists
   stat:
     path: "{{ rockyou_gz }}"
   register: rockyou_gz_stat
+  become: no
 
 - name: Display rockyou.txt.gz status
   debug:
@@ -18,6 +20,7 @@
   stat:
     path: "{{ rockyou_txt }}"
   register: rockyou_txt_stat
+  become: no
 
 - name: Unzip rockyou.txt.gz using gunzip
   command: gunzip "{{ rockyou_gz }}"
@@ -35,11 +38,14 @@
     owner: root
     group: root
   when: rockyou_txt_stat.stat.exists or gunzip_result.changed
+  become: true
+  become_method: sudo
 
 - name: Verify rockyou.txt was created successfully
   stat:
     path: "{{ rockyou_txt }}"
   register: final_check
+  become: no
 
 - name: Display success message
   debug:
@@ -50,6 +56,7 @@
   shell: "ls -lh {{ rockyou_txt }}"
   register: file_info
   when: final_check.stat.exists
+  become: no
 
 - name: Show file details
   debug:

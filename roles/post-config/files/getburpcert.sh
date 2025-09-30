@@ -4,3 +4,4 @@ burp=$(find / -name burp*.jar 2>/dev/null | tail -1)
 sleep 40
 curl http://localhost:8080/cert -o /tmp/cacert.der
 exit
+

@@ -9,8 +9,9 @@
   copy:
     src: files/getburpcert.sh
     dest: /tmp/getburpcert.sh
-    mode: 0744
+    mode: 0755
   when: burp_cert.stat.exists == False
+  become: no
 
 - name: "Executing bash script to Download CA Certificate"
   shell:
@@ -50,6 +51,15 @@
   template:
     src: "templates/ConfigCommunity.json.j2"
     dest: "{{ ansible_env.HOME }}/.BurpSuite/ConfigCommunity.json"
+  become: no
+
+- name: Ensure Firefox ESR distribution directory exists
+  ansible.builtin.file:
+    path: "/usr/share/firefox-esr/distribution"
+    state: directory
+    mode: '0755'
+  become: true
+  become_method: sudo
   
 - name: "Updating Firefox Policies"
   template: 

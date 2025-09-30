@@ -2,6 +2,7 @@
 # Configuration for sudoers
 - name: Add NOPASSWD rule for the current user
   become: true
+  become_method: sudo
   lineinfile:
     dest: /etc/sudoers
     insertbefore: EOF
@@ -11,4 +12,3 @@
   when: ansible_user_id != 'root'
   with_items:
     - "{{ ansible_user_id }}\tALL=(ALL) NOPASSWD:ALL"
-

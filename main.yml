@@ -4,5 +4,11 @@
   connection: local
   roles:
     - role: "roles/pre-config"
+      become: true
+      become_method: sudo
     - role: "roles/install-tools"
+      become: true
+      become_method: sudo
     - role: "roles/post-config"
+      become: true
+      become_method: sudo

@@ -1,3 +1,4 @@
+---
 # Configuration for tmux
 - name: Ensure Tmux is installed.
   ansible.builtin.apt:
@@ -12,6 +13,13 @@
     dest: "{{ ansible_env.HOME }}/.tmux.conf"
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_id }}"
+  become: no
+
+- name: Convert tmux.conf line endings to Unix format
+  ansible.builtin.shell: |
+    dos2unix {{ ansible_env.HOME }}/.tmux.conf 2>/dev/null || sed -i 's/\r$//' {{ ansible_env.HOME }}/.tmux.conf
+  become: no
+  ignore_errors: yes
 
 - name: Ensure .tmux directory exists
   ansible.builtin.file:
@@ -19,6 +27,7 @@
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_id }}"
     state: directory
+  become: no
 
 - name: Ensure tmux plugins directory exists
   ansible.builtin.file:
@@ -26,19 +35,46 @@
     owner: "{{ ansible_user_id }}"
     group: "{{ ansible_user_id }}"
     state: directory
+  become: no
 
 - name: Install TPM to handle tmux tmux-plugins
   ansible.builtin.git:
     repo: https://github.com/tmux-plugins/tpm
     dest: "{{ ansible_env.HOME }}/.tmux/plugins/tpm"
+  become: no
 
 - name: Check if TPM plugin (e.g. tmux-sensible) is already installed
   ansible.builtin.stat:
     path: "{{ ansible_env.HOME }}/.tmux/plugins/tmux-sensible"
   register: tmux_plugin_installed
+  become: no
 
 - name: Run Tmux TPM post install script
   ansible.builtin.shell: "{{ ansible_env.HOME }}/.tmux/plugins/tpm/bin/install_plugins"
   args:
-    executable: /bin/zsh
+    executable: /bin/bash
   when: not tmux_plugin_installed.stat.exists
+  become: no
+  register: tpm_install
+  ignore_errors: yes
+
+- name: Display TPM installation output
+  debug:
+    var: tpm_install
+  when: not tmux_plugin_installed.stat.exists
+
+- name: Manually clone tmux plugins if TPM fails
+  ansible.builtin.git:
+    repo: "{{ item.repo }}"
+    dest: "{{ ansible_env.HOME }}/.tmux/plugins/{{ item.name }}"
+    depth: 1
+    update: yes
+  loop:
+    - { name: "tmux-sensible", repo: "https://github.com/tmux-plugins/tmux-sensible" }
+    - { name: "tmux-resurrect", repo: "https://github.com/tmux-plugins/tmux-resurrect" }
+    - { name: "tmux-continuum", repo: "https://github.com/tmux-plugins/tmux-continuum" }
+    - { name: "nord-tmux", repo: "https://github.com/arcticicestudio/nord-tmux" }
+    - { name: "tmux-yank", repo: "https://github.com/tmux-plugins/tmux-yank" }
+  become: no
+  when: tpm_install is failed or not tmux_plugin_installed.stat.exists
+  ignore_errors: yes
